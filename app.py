@@ -133,37 +133,66 @@ def servicios():
     return render_template("servicios.html")
 
 
-@app.route("/rastreo")
+@app.route("/rastreo", methods=["GET", "POST"])
 def rastreo():
-    return render_template("rastreo.html")
+    estado_pedido = None #Variable vacia por defecto
+    if request.method == "POST":
+        # 1. Atrapamos el número de guía que escribió el usuario
+        guia = request.form.get("nGuia")
+
+        # 2. Nos conectamos a la base de datos
+        conexion = sqlite3.connect("clinica.db")
+        cursor = conexion.cursor()
+
+        # 3. Buscamos el registro en la tabla
+        # Nota: La coma en (guia,) es obligatoria en Python cuando envías un solo valor
+        cursor.execute("SELECT estatus FROM pedidos WHERE id = ?", (guia,))
+
+        # 4. fetchone() nos devuelve una "tupla" (un paquete) con el resultado, o 'None' si no existe
+        registro = cursor.fetchone()
+
+        conexion.close()
+
+        # 5. Si encontramos algo, sacamos el estatus (que está en la posición 0 del paquete)
+        if registro:
+            estado_pedido = registro[0]
+        else:
+            estado_pedido = "No se encontro ningun pedido con ese numero de guia."
+        
+    # Enviamos el HTML, pasándole la variable 'resultado'
+    return render_template("rastreo.html", resultado=estado_pedido)
 
 @app.route("/pedido", methods=["GET", "POST"])
 def pedido():
     # Si el usuario le dio clic al botón Enviar...
     if request.method == "POST":
-        # Atrapamos los datos usando los 'name' que indicamos en el HTML de pedido
+        # 1. Atrapamos los datos usando los 'name' que indicamos en el HTML de pedido
         nombre_cliente = request.form.get("nme")
         correo_cliente = request.form.get("email")
         telefono_cliente = request.form.get("tel")
         notas = request.form.get("especs")
+        
 
-        # 1. Nos conectamos a la base de datos
+        # 2. Nos conectamos a la base de datos
         conexion = sqlite3.connect("clinica.db")
         cursor = conexion.cursor()
 
-        # 2. Ejecutamos el INSERT. 
+        # 3. Ejecutamos el INSERT. 
         # IMPORTANTE: En SQLite usamos signos de interrogación (?) por seguridad para evitar Inyecciones SQL.
         cursor.execute(
             "INSERT INTO pedidos (nombre, email, telefono, especificaciones) VALUES (?, ?, ?, ?)",
             (nombre_cliente, correo_cliente, telefono_cliente, notas)
         )
 
-        # 3. Guardamos los cambios y cerramos la conexión
+        # 4. Atrapamos el ID que la BD genero
+        folio = cursor.lastrowid
+
+        # 5. Guardamos los cambios y cerramos la conexión
         conexion.commit()
         conexion.close()
 
         # Mostramos un mensaje temporal en el navegador
-        return f"Gracias {nombre_cliente}, tu pedido fue recibido en el servidor."
+        return f"Gracias {nombre_cliente}, tu pedido fue recibido en el servidor y tu numero de guia es {folio}."
 
     # Si el usuario solo está entrando a ver la página
     return render_template("pedido.html")
