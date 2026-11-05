@@ -1,6 +1,31 @@
+import sqlite3
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
+
+def inicializar_bd():
+    # Esto crea el archivo clinica.db si no existe, o se conecta si ya existe
+    conexion = sqlite3.connect("clinica.db")
+    cursor = conexion.cursor()
+
+    # Escribimos el SQL puro para crear la tabla
+    # Nota que agregamos un 'estatus' para usarlo luego en la vista de rastreo
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS pedidos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT,
+        email TEXT,
+        telefono TEXT,
+        especificaciones TEXT,
+        estatus TEXT DEFAULT 'Recibido'
+        )
+    ''')
+    conexion.commit()
+    conexion.close()
+
+# Ejecutamos la función para que la base de datos nazca
+inicializar_bd()
+
 datos_laboratorio = {
     "laboratorio": "Laboratorio Dental Blanco",
     "lema": "Recibimos sus archivos digitales STL, OBJ, PLY",
@@ -119,12 +144,23 @@ def pedido():
         # Atrapamos los datos usando los 'name' que indicamos en el HTML de pedido
         nombre_cliente = request.form.get("nme")
         correo_cliente = request.form.get("email")
+        telefono_cliente = request.form.get("tel")
         notas = request.form.get("especs")
 
-        # Por ahora, solo lo imprimimos en la terminal de la computadora
-        print(f"¡Llegó un pedido de {nombre_cliente}!")
-        print(f"Correo: {correo_cliente}")
-        print(f"Notas: {notas}")
+        # 1. Nos conectamos a la base de datos
+        conexion = sqlite3.connect("clinica.db")
+        cursor = conexion.cursor()
+
+        # 2. Ejecutamos el INSERT. 
+        # IMPORTANTE: En SQLite usamos signos de interrogación (?) por seguridad para evitar Inyecciones SQL.
+        cursor.execute(
+            "INSERT INTO pedidos (nombre, email, telefono, especificaciones) VALUES (?, ?, ?, ?)",
+            (nombre_cliente, correo_cliente, telefono_cliente, notas)
+        )
+
+        # 3. Guardamos los cambios y cerramos la conexión
+        conexion.commit()
+        conexion.close()
 
         # Mostramos un mensaje temporal en el navegador
         return f"Gracias {nombre_cliente}, tu pedido fue recibido en el servidor."
