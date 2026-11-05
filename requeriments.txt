@@ -1,0 +1,4 @@
+Cada que entre a trabjar se debe activar el entorno virtual.
+Navegar hacia la carpeta de tu proyecto (cd proyecto_dental).
+Activar tu burbuja (venv\Scripts\activate).
+posteriormente activamos la ip con (python app.py) y vamos a la ip (http://127.0.0.1:5000/)

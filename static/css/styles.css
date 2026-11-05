@@ -1,0 +1,97 @@
+/* 1. Reset básico: Quita los márgenes por defecto de los navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 2. Variables de color: Paleta limpia, clínica y profesional */
+:root {
+    --color-primario: #fff9d7;   /* Azul médico profesional */
+    --color-fondo: #1f2325;      /* Gris muy claro para el fondo */
+    --color-texto: #ffffff;      /* Gris oscuro (el negro puro cansa la vista) */
+    --color-tarjeta: #4D6C7B;    /* Blanco para los productos */
+}
+
+/* 3. Tipografía y Fondo General */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+}
+
+/* 4. Barra de Navegación */
+header {
+    background-color: var(--color-primario);
+    padding: 1rem 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+nav ul {
+    list-style: none; /* Quita las viñetas */
+    display: flex;    /* Alinea los elementos en horizontal */
+    justify-content: center;
+    gap: 2rem;        /* Espacio entre los botones */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #b3fcf6;   /* Cambio de color al pasar el mouse */
+}
+
+/* 5. Contenedor Central */
+main {
+    max-width: 900px;
+    margin: 3rem auto; /* Centra el contenido en la pantalla */
+    padding: 0 1rem;
+}
+
+/* 6. Estilos del Catálogo */
+h1 {
+    text-align: center;
+    color: var(--color-primario);
+    font-size: 2.5rem;
+}
+
+h3 {
+    text-align: center;
+    font-weight: normal;
+    font-style: italic;
+    color: #666;
+    margin-bottom: 3rem;
+}
+
+h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-primario);
+}
+
+ul {
+    list-style: none; /* Quitamos las viñetas feas de la lista de artículos */
+}
+/* 7. Diseño de los productos tipo "Tarjeta" */
+li {
+    background-color: var(--color-tarjeta);
+    margin-bottom: 0.8rem;
+    padding: 1.2rem;
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra sutil 3D */
+    display: flex;
+    justify-content: space-between; /* Empuja el nombre a la izquierda y el precio a la derecha */
+    align-items: center;
+}
+
+li strong {
+    color: var(--color-primario);
+    font-size: 1.2rem;
+}

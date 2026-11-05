@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lab.Blanco</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <main>
+        
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="#">Contacto</a></li>
+                <li><a href="/rastreo">Rastreo</a></li>
+                <li><a href="/servicios">Servicio</a></li>
+            </ul>
+        </nav>
+    </main>
+</body>
+
+<body>
+    <main>
+        {% block contenido %}
+
+        {% endblock %}
+    </main>
+</body>
+
+
+
+
+</html>

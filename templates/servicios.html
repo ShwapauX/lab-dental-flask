@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h1>{{datos.laboratorio}}</h1>
+<h3><em>{{datos.lema}}</em></h3>
+
+<hr>
+
+{% for seccion in datos.catalogo_servicios %}
+    <h2>{{ seccion.categoria}}</h2>
+    <ul>
+    {% for articulo in seccion.articulos %}
+    <li>
+        {{ articulo.concepto }} <strong>${{ articulo.precio_mxn }} MXN</strong>
+    </li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+<h3>ARETÉ - PERSIGUE LA EXCELENCIA EN TODO LO QUE HAGAS</h3>
+
+{% endblock %}
