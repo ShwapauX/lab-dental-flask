@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
-<h1>Rastree su paquete</h1>
-<p>numero de guia</p>
+    <h1>Rastree su paquete</h1>
+
+    <form action="" method="post">
+        <label for="">Numero de guia</label>
+        <input type="text" name="nGuia" required>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <!-- Resultados que presentaremos al usuario [Jinja]-->
+    {% if resultado %}
+        <hr>
+        <h3>Estado de tu pedido: {{ resultado }}</h3>
+    {% endif %}
+
 {% endblock %}
