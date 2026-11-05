@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 datos_laboratorio = {
@@ -112,6 +112,25 @@ def servicios():
 def rastreo():
     return render_template("rastreo.html")
 
+@app.route("/pedido", methods=["GET", "POST"])
+def pedido():
+    # Si el usuario le dio clic al botón Enviar...
+    if request.method == "POST":
+        # Atrapamos los datos usando los 'name' que indicamos en el HTML de pedido
+        nombre_cliente = request.form.get("nme")
+        correo_cliente = request.form.get("email")
+        notas = request.form.get("especs")
+
+        # Por ahora, solo lo imprimimos en la terminal de la computadora
+        print(f"¡Llegó un pedido de {nombre_cliente}!")
+        print(f"Correo: {correo_cliente}")
+        print(f"Notas: {notas}")
+
+        # Mostramos un mensaje temporal en el navegador
+        return f"Gracias {nombre_cliente}, tu pedido fue recibido en el servidor."
+
+    # Si el usuario solo está entrando a ver la página
+    return render_template("pedido.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h1>hola desde pedido</h1>
+<form action="" method="post">
+    <label>Introduce tu nombre</label>
+    <input type="text" name="nme">
+    <label>Introduce tu email</label>
+    <input type="email" name="email">
+    <label>Introduce tu telefono</label>
+    <input type="text" name="tel">
+    <label>Introduce las Especificaciones</label>
+    <textarea id="" name="especs" placeholder="Escribe tus especificaciones..."></textarea>
+    <button type="submit" name="sendForm">Enviar</button>
+</form>
+{% endblock %}
