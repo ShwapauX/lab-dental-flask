@@ -9,6 +9,19 @@
     <input type="email" name="email">
     <label>Introduce tu telefono</label>
     <input type="text" name="tel">
+    <label>Selecciona el servicio </label>
+    <select name="servicio" required>
+        <option value="" disabled selected> -- Elige una opcion -- </option>
+        {% for seccion in datos.catalogo_servicios %}
+            <optgroup label="{{ seccion.categoria }}"> 
+                {% for articulo in seccion.articulos %}
+                <option value="{{ articulo.concepto }}">
+                    {{ articulo.concepto }} - ${{ articulo.precio_mxn }} MXN
+                </option>
+                {% endfor %}
+            </optgroup>
+        {% endfor %}
+    </select>
     <label>Introduce las Especificaciones</label>
     <textarea id="" name="especs" placeholder="Escribe tus especificaciones..."></textarea>
     <button type="submit" name="sendForm">Enviar</button>

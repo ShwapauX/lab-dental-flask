@@ -16,6 +16,7 @@ def inicializar_bd():
         nombre TEXT,
         email TEXT,
         telefono TEXT,
+        servicio TEXT,
         especificaciones TEXT,
         estatus TEXT DEFAULT 'Recibido'
         )
@@ -170,6 +171,7 @@ def pedido():
         nombre_cliente = request.form.get("nme")
         correo_cliente = request.form.get("email")
         telefono_cliente = request.form.get("tel")
+        servicio_elegido = request.form.get("servicio")
         notas = request.form.get("especs")
         
 
@@ -180,8 +182,8 @@ def pedido():
         # 3. Ejecutamos el INSERT. 
         # IMPORTANTE: En SQLite usamos signos de interrogación (?) por seguridad para evitar Inyecciones SQL.
         cursor.execute(
-            "INSERT INTO pedidos (nombre, email, telefono, especificaciones) VALUES (?, ?, ?, ?)",
-            (nombre_cliente, correo_cliente, telefono_cliente, notas)
+            "INSERT INTO pedidos (nombre, email, telefono, servicio, especificaciones) VALUES (?, ?, ?, ?, ?)",
+            (nombre_cliente, correo_cliente, telefono_cliente, servicio_elegido, notas)
         )
 
         # 4. Atrapamos el ID que la BD genero
@@ -195,7 +197,7 @@ def pedido():
         return f"Gracias {nombre_cliente}, tu pedido fue recibido en el servidor y tu numero de guia es {folio}."
 
     # Si el usuario solo está entrando a ver la página
-    return render_template("pedido.html")
+    return render_template("pedido.html", datos = datos_laboratorio)
 
 if __name__ == "__main__":
     app.run(debug=True)
