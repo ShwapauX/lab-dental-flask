@@ -1,5 +1,7 @@
 import sqlite3
 from flask import Flask, render_template, request
+import smtplib
+from email.message import EmailMessage
 
 app = Flask(__name__)
 
@@ -119,6 +121,40 @@ datos_laboratorio = {
     ],
 }
 
+def enviar_correo_confirmacion(email_cliente, nombre, servicio, folio):
+    remitente = "tbhorchata@gmail.com"
+    password = "Shwapau+1797"
+
+    #Creacion del correo
+    msg = EmailMessage()
+    msg['Subject'] = f"Confirmacion de Pedido LDB - Folio # {folio}"
+    msg['From'] = remitente
+    msg['To'] = email_cliente
+
+    cuerpo = f"""
+    Hola {nombre},
+
+    Hemos recibido tu solicitud exitosamente.
+    Servicio solicitado: {servicio}
+    
+    Tu número de guía / folio para rastrear el pedido es: {folio}
+    
+    Gracias por confiar en Laboratorio Dental Blanco.
+    ARETÉ - Persigue la excelencia en todo lo que hagas.
+    """
+    msg.set_content(cuerpo)
+
+    # Nos conectamos al servidor de Gmail para enviarlo
+    try:
+        # El puerto 465 es el estándar para conexiones seguras SSL
+        servidor = smtplib.SMTP_SSL('smtp.gmail.com, 465')
+        servidor.login(remitente, password)
+        servidor.send_message(msg)
+        servidor.quit()
+        print(f"Correo de confirmación enviado a {email_cliente}")
+    except Exception as e:
+        print(f"Ocurrió un error al enviar el correo: {e}")
+
 @app.route("/servicios")
 def catalogo():
     # Le pasamos la variable al HTML dándole un nombre (ej. 'datos')
@@ -193,8 +229,10 @@ def pedido():
         conexion.commit()
         conexion.close()
 
+        enviar_correo_confirmacion(correo_cliente, nombre_cliente, servicio_elegido, folio)
+
         # Mostramos un mensaje temporal en el navegador
-        return f"Gracias {nombre_cliente}, tu pedido fue recibido en el servidor y tu numero de guia es {folio}."
+        return f"Gracias {nombre_cliente}, tu pedido fue recibido y se envio un correo a {correo_cliente} numero de guia es {folio}."
 
     # Si el usuario solo está entrando a ver la página
     return render_template("pedido.html", datos = datos_laboratorio)
