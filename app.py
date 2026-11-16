@@ -2,7 +2,11 @@ import sqlite3
 from flask import Flask, render_template, request
 import smtplib
 from email.message import EmailMessage
+import os
+from dotenv import load_dotenv
 
+# Cargar las variables del archivo .env a la memoria
+load_dotenv()
 app = Flask(__name__)
 
 def inicializar_bd():
@@ -122,8 +126,8 @@ datos_laboratorio = {
 }
 
 def enviar_correo_confirmacion(email_cliente, nombre, servicio, folio):
-    remitente = "tbhorchata@gmail.com"
-    password = "Shwapau+1797"
+    remitente = os.getenv("EMAIL_REMITENTE")
+    password = os.getenv("EMAIL_PASSWORD")
 
     #Creacion del correo
     msg = EmailMessage()
@@ -147,7 +151,7 @@ def enviar_correo_confirmacion(email_cliente, nombre, servicio, folio):
     # Nos conectamos al servidor de Gmail para enviarlo
     try:
         # El puerto 465 es el estándar para conexiones seguras SSL
-        servidor = smtplib.SMTP_SSL('smtp.gmail.com, 465')
+        servidor = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         servidor.login(remitente, password)
         servidor.send_message(msg)
         servidor.quit()
